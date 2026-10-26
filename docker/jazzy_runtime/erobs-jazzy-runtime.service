@@ -12,7 +12,11 @@ TimeoutStopSec=30
 
 # Configuration variables (override via `systemctl edit erobs-jazzy-runtime.service`)
 Environment="CONTAINER_NAME=beambot_ros"
-Environment="IMAGE=localhost/erobs-jazzy-runtime:latest"
+Environment="IMAGE=ghcr.io/kushantp58/erobs-jazzy-runtime:latest"
+# ghcr.io package is private; log in once with:
+#   podman login ghcr.io --authfile ~/.config/containers/auth.json
+# (the default authfile under /run is wiped on reboot)
+Environment="REGISTRY_AUTH_FILE=%h/.config/containers/auth.json"
 Environment="BEAMBOT_BEAMLINE_CONFIG=/root/ws/erobs/src/beambot/config/example_cms_beamline.yaml"
 
 
@@ -23,8 +27,9 @@ Environment="LAUNCH_ARGS=enable_vision:=false enable_pipettor:=false"
 # Clean up any leftover container with the same name
 ExecStartPre=-/usr/bin/podman rm -f --ignore ${CONTAINER_NAME}
 
-# Start the container 
-ExecStart=/usr/bin/podman run --rm --replace \
+# Start the container, pulling the image if the registry has a newer one
+# (falls back to the local copy if the registry is unreachable)
+ExecStart=/usr/bin/podman run --rm --replace --pull=newer \
     --name ${CONTAINER_NAME} \
     --network host \
     --ipc=host \
