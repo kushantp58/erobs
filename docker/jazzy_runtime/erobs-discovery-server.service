@@ -1,0 +1,40 @@
+[Unit]
+Description=EROBS Fast DDS Discovery Server (Podman)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=10
+TimeoutStartSec=0
+TimeoutStopSec=30
+
+# Configuration variables (override via `systemctl edit erobs-discovery-server.service`)
+# SERVER_ID is the zero-based position of this host in the clients'
+# ROS_DISCOVERY_SERVER list, e.g. with
+#   ROS_DISCOVERY_SERVER=<discovery-server-host>:11811
+# The first (or only) server uses SERVER_ID=0 PORT=11811; a second one in the
+# list would use SERVER_ID=1.
+# This unit is only for local testing.
+Environment="CONTAINER_NAME=erobs_discovery_server"
+Environment="IMAGE=docker.io/library/ros:jazzy-ros-base"
+Environment="SERVER_ID=0"
+Environment="PORT=11811"
+
+# Clean up any leftover container with the same name
+ExecStartPre=-/usr/bin/podman rm -f --ignore ${CONTAINER_NAME}
+
+# Host networking so clients can reach the server on its UDP port
+ExecStart=/usr/bin/podman run --rm --replace --pull=missing \
+    --name ${CONTAINER_NAME} \
+    --network host \
+    ${IMAGE} \
+    fastdds discovery --server-id ${SERVER_ID} --udp-port ${PORT}
+
+# Gracefully stop and clean up the container
+ExecStop=/usr/bin/podman stop --ignore -t 20 ${CONTAINER_NAME}
+ExecStopPost=-/usr/bin/podman rm -f --ignore ${CONTAINER_NAME}
+
+[Install]
+WantedBy=default.target
