@@ -17,7 +17,7 @@ Environment="IMAGE=ghcr.io/kushantp58/erobs-jazzy-runtime:latest"
 #   podman login ghcr.io --authfile ~/.config/containers/auth.json
 # (the default authfile under /run is wiped on reboot)
 Environment="REGISTRY_AUTH_FILE=%h/.config/containers/auth.json"
-Environment="BEAMBOT_BEAMLINE_CONFIG=/root/ws/erobs/src/beambot/config/example_cms_beamline.yaml"
+Environment="BEAMBOT_BEAMLINE_CONFIG=/home/ros/ws/erobs/src/beambot/config/example_cms_beamline.yaml"
 
 
 Environment="LAUNCH_ARGS=enable_vision:=false enable_pipettor:=false"

@@ -5,7 +5,7 @@ Ophyd device wrapper that lets Bluesky control the robot via ROS2 action client.
 ## Quick Start
 
 ```python
- export PYTHONPATH=/root/ws/erobs/src/bluesky_ros:$PYTHONPATH
+ export PYTHONPATH=/home/ros/ws/erobs/src/bluesky_ros:$PYTHONPATH
 ```
 
 

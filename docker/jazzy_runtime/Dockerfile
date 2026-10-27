@@ -10,7 +10,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends wget && \
     apt-get install -y --no-install-recommends /tmp/zivid/*.deb && \
     rm -rf /tmp/zivid /var/lib/apt/lists/*
 
-WORKDIR /root/ws/erobs
+# Run as a non-root user: rename the base image's uid 1000 user and drop its sudo access.
+RUN usermod -l ros -d /home/ros -m ubuntu && groupmod -n ros ubuntu && gpasswd -d ros sudo
+
+WORKDIR /home/ros/ws/erobs
 
 COPY src/ src/
 COPY utils/ utils/
@@ -27,6 +30,9 @@ ENV RMW_IMPLEMENTATION=rmw_fastrtps_cpp
 ENV ROS_DOMAIN_ID=65
 
 # Source workspace in all shells (podman exec, interactive, etc.)
-RUN echo "source /root/ws/erobs/install/setup.bash" >> /root/.bashrc
+RUN echo "source /home/ros/ws/erobs/install/setup.bash" >> /home/ros/.bashrc && \
+    chown -R ros:ros /home/ros
 
-ENTRYPOINT ["/root/ws/erobs/utils/start_mcp_robot_stack.sh"]
+USER ros
+
+ENTRYPOINT ["/home/ros/ws/erobs/utils/start_mcp_robot_stack.sh"]
