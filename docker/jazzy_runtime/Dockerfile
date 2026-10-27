@@ -23,7 +23,8 @@ RUN . /opt/ros/${ROS_DISTRO}/setup.sh && \
     colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release
 
 ENV RMW_IMPLEMENTATION=rmw_fastrtps_cpp
-ENV ROS_DOMAIN_ID=0
+# Non-default ROS domain; keep in sync with erobs-jazzy-runtime.service.
+ENV ROS_DOMAIN_ID=65
 
 # Source workspace in all shells (podman exec, interactive, etc.)
 RUN echo "source /root/ws/erobs/install/setup.bash" >> /root/.bashrc
