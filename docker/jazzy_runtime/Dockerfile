@@ -1,4 +1,8 @@
-FROM docker.io/osrf/ros:jazzy-desktop-full
+# Base image is pinned by digest. To update it (e.g. for security fixes):
+#   podman pull docker.io/osrf/ros:jazzy-desktop-full
+#   podman image inspect docker.io/osrf/ros:jazzy-desktop-full --format '{{.Digest}}'
+# then paste the new sha256 below and re-test.
+FROM docker.io/osrf/ros:jazzy-desktop-full@sha256:ae7ad3ac243da1dfd8bd402a2fa08e149ffbf7a385013bd8ef798d0800accdc8
 
 # Install Zivid SDK 2.17.2 for Ubuntu 24.04 (Noble).
 # When bumping ZIVID_VERSION, regenerate zivid.sha256 (sha256sum *.deb) from the new files.
