@@ -63,6 +63,12 @@ def generate_launch_description():
         description="Start rosbridge (port 9090) for MCP clients",
     )
 
+    declare_rosbridge_address = DeclareLaunchArgument(
+        "rosbridge_address",
+        default_value="localhost",
+        description="Address rosbridge binds to (localhost = this host only, no auth)",
+    )
+
     enable_vision = LaunchConfiguration("enable_vision")
     enable_pipettor = LaunchConfiguration("enable_pipettor")
     use_mock_hardware = LaunchConfiguration("use_mock_hardware")
@@ -70,6 +76,7 @@ def generate_launch_description():
     enable_batching = LaunchConfiguration("enable_batching")
     orchestrator_log_level = LaunchConfiguration("orchestrator_log_level")
     enable_rosbridge = LaunchConfiguration("enable_rosbridge")
+    rosbridge_address = LaunchConfiguration("rosbridge_address")
 
     # Share MoveIt's IK solver settings under RobotModelLoader's parameter key.
     _kinematics_path = (
@@ -210,6 +217,7 @@ def generate_launch_description():
                 ]
             )
         ),
+        launch_arguments={"address": rosbridge_address}.items(),
         condition=IfCondition(enable_rosbridge),
     )
 
@@ -223,6 +231,7 @@ def generate_launch_description():
             declare_enable_batching,
             declare_orchestrator_log_level,
             declare_enable_rosbridge,
+            declare_rosbridge_address,
             move_to_server,
             end_effector_server,
             tool_exchange_server,

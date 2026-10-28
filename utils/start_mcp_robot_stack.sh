@@ -12,6 +12,7 @@
 #   enable_joystick:=false         gamepad control
 #   enable_batching:=true          MTC stage batching in the orchestrator
 #   enable_rosbridge:=true         rosbridge on port 9090
+#   rosbridge_address:=localhost   rosbridge bind address (no auth; keep local)
 #   orchestrator_log_level:=info   debug|info|warn|error|fatal
 
 set -e
