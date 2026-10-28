@@ -39,7 +39,6 @@ ExecStart=/usr/bin/podman run --rm --replace --pull=newer \
     --name ${CONTAINER_NAME} \
     --network host \
     --ipc=host \
-    --pid=host \
     -e BEAMBOT_BEAMLINE_CONFIG=${BEAMBOT_BEAMLINE_CONFIG} \
     -e ROS_DOMAIN_ID=${ROS_DOMAIN_ID} \
     ${IMAGE} \
@@ -51,4 +50,3 @@ ExecStopPost=-/usr/bin/podman rm -f --ignore ${CONTAINER_NAME}
 
 [Install]
 WantedBy=default.target
-
