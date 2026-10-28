@@ -6,6 +6,7 @@ mock hardware applies only to the robot.
 
 import yaml
 from ament_index_python.packages import get_package_share_path
+from beambot.config_loader import build_pipeline_param_args, moveit_config_package
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
 from launch.conditions import IfCondition
@@ -13,8 +14,6 @@ from launch.launch_description_sources import AnyLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
-
-from beambot.config_loader import build_pipeline_param_args, moveit_config_package
 
 
 def generate_launch_description():
@@ -150,10 +149,20 @@ def generate_launch_description():
         parameters=[
             {
                 "settings_2d_file_path": PathJoinSubstitution(
-                    [FindPackageShare("beambot"), "config", "zivid", "zivid_settings.yml"]
+                    [
+                        FindPackageShare("beambot"),
+                        "config",
+                        "zivid",
+                        "zivid_settings.yml",
+                    ]
                 ),
                 "settings_file_path": PathJoinSubstitution(
-                    [FindPackageShare("beambot"), "config", "zivid", "scene_capture_noproj.yml"]
+                    [
+                        FindPackageShare("beambot"),
+                        "config",
+                        "zivid",
+                        "scene_capture_noproj.yml",
+                    ]
                 ),
                 "frame_id": "zivid_optical_frame",
             }
@@ -194,7 +203,11 @@ def generate_launch_description():
     rosbridge = IncludeLaunchDescription(
         AnyLaunchDescriptionSource(
             PathJoinSubstitution(
-                [FindPackageShare("rosbridge_server"), "launch", "rosbridge_websocket_launch.xml"]
+                [
+                    FindPackageShare("rosbridge_server"),
+                    "launch",
+                    "rosbridge_websocket_launch.xml",
+                ]
             )
         ),
         condition=IfCondition(enable_rosbridge),
