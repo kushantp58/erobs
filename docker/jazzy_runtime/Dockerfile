@@ -43,4 +43,8 @@ RUN echo "source /home/ros/ws/erobs/install/setup.bash" >> /home/ros/.bashrc && 
 
 USER ros
 
+# ros2 launch only handles SIGINT; podman's default SIGTERM is ignored by PID 1 and
+# every stop waits for the timeout and then SIGKILLs.
+STOPSIGNAL SIGINT
+
 ENTRYPOINT ["/home/ros/ws/erobs/utils/start_mcp_robot_stack.sh"]
