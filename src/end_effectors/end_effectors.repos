@@ -2,23 +2,23 @@ repositories:
   serial:
     type: git
     url: https://github.com/tylerjw/serial.git
-    version: ros2
+    version: d8d160678aa0b31cdf467c052b954fa287cc6cdf  # ros2
   robotiq_hande_driver:
     type: git
     # Fork carries the on_activate retry-with-reconnect fix (see fork issue #1).
-    # Tracks the branch so further fork commits flow in on the next vcs import.
+    # Pinned to a commit; to update, bump the hash to the new fork commit and re-test.
     # Upstream: AGH-CEAI/robotiq_hande_driver @ jazzy-devel — PR the fix later to revert this.
     url: https://github.com/bondada-a/robotiq_hande_driver.git
-    version: jazzy-devel
+    version: 77640c32aa74cfa91f026c45e66b36dda9c22437  # jazzy-devel
   robotiq_hande_description:
     type: git
     url: https://github.com/macmacal/robotiq_hande_description.git
-    version: humble-devel
+    version: 5ae8b97068f8a1136d37dd476b72bafc2b1cdfb0  # humble-devel
   ros2_epick_gripper:
     type: git
     url: https://github.com/bondada-a/ros2_epick_gripper.git
-    version: jazzy
+    version: e8df7b30a8772b6cb27161e1f7fefaea3eba5490  # jazzy
   pipettor:
     type: git
     url: https://github.com/sixym3/pipettor.git
-    version: main
+    version: 8f14bb019dd1e382f15848c113fd3ab701b03a0e  # main

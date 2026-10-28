@@ -1,4 +1,4 @@
-# Vision system repositories
+# Vision system repositories (pinned to commits; bump the hash to update, then re-test)
 # See https://github.com/dirk-thomas/vcstool
 #
 # To import these repositories into your workspace:
@@ -8,7 +8,7 @@ repositories:
   zivid-ros:
     type: git
     url: https://github.com/zivid/zivid-ros.git
-    version: master
+    version: f726e71d03c52a6b8a6695d513859ad023e839c9  # master
 #  zed-ros2-wrapper:
 #    type: git
 #    url: https://github.com/stereolabs/zed-ros2-wrapper.git
