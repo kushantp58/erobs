@@ -24,13 +24,19 @@ RUN apt-get update && apt-get install -y --no-install-recommends wget && \
 RUN usermod -l ros -d /home/ros -m ubuntu && groupmod -n ros ubuntu && gpasswd -d ros sudo
 
 WORKDIR /home/ros/ws/erobs
+# Own the workspace dir up front so the build below can run as ros without a recursive chown
+# (a chown -R after the build would duplicate every file into a new layer).
+RUN chown ros:ros /home/ros/ws /home/ros/ws/erobs
 
-COPY src/ src/
-COPY utils/ utils/
+COPY --chown=ros:ros src/ src/
+COPY --chown=ros:ros utils/ utils/
 # Import driver repos and install ROS dependencies.
 RUN chmod +x utils/setup.sh utils/start_mcp_robot_stack.sh && \
     bash utils/setup.sh && \
     rm -rf /var/lib/apt/lists/*
+
+# Numeric uid/gid of the ros user (renamed from ubuntu above).
+USER 1000:1000
 
 RUN . "/opt/ros/${ROS_DISTRO}/setup.sh" && \
     colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release
@@ -40,11 +46,7 @@ ENV RMW_IMPLEMENTATION=rmw_fastrtps_cpp
 ENV ROS_DOMAIN_ID=65
 
 # Source workspace in all shells (podman exec, interactive, etc.)
-RUN echo "source /home/ros/ws/erobs/install/setup.bash" >> /home/ros/.bashrc && \
-    chown -R ros:ros /home/ros
-
-# Numeric uid/gid of the ros user (renamed from ubuntu above).
-USER 1000:1000
+RUN echo "source /home/ros/ws/erobs/install/setup.bash" >> /home/ros/.bashrc
 
 # ros2 launch only handles SIGINT; podman's default SIGTERM is ignored by PID 1 and
 # every stop waits for the timeout and then SIGKILLs.
