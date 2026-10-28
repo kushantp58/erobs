@@ -8,8 +8,10 @@ FROM docker.io/osrf/ros:jazzy-desktop-full@sha256:ae7ad3ac243da1dfd8bd402a2fa08e
 # When bumping ZIVID_VERSION, regenerate zivid.sha256 (sha256sum *.deb) from the new files.
 ARG ZIVID_VERSION=2.17.2+440b2367-1
 COPY docker/jazzy_runtime/zivid.sha256 /tmp/zivid.sha256
+WORKDIR /tmp/zivid
+# apt packages are not version-pinned: the pinned base image is the reproducibility control.
+# hadolint ignore=DL3008
 RUN apt-get update && apt-get install -y --no-install-recommends wget && \
-    mkdir -p /tmp/zivid && cd /tmp/zivid && \
     wget -q https://downloads.zivid.com/sdk/releases/${ZIVID_VERSION}/u24/amd64/zivid_${ZIVID_VERSION}_amd64.deb && \
     wget -q https://downloads.zivid.com/sdk/releases/${ZIVID_VERSION}/u24/amd64/zivid-studio_${ZIVID_VERSION}_amd64.deb && \
     wget -q https://downloads.zivid.com/sdk/releases/${ZIVID_VERSION}/u24/amd64/zivid-tools_${ZIVID_VERSION}_amd64.deb && \
@@ -30,7 +32,7 @@ RUN chmod +x utils/setup.sh utils/start_mcp_robot_stack.sh && \
     bash utils/setup.sh && \
     rm -rf /var/lib/apt/lists/*
 
-RUN . /opt/ros/${ROS_DISTRO}/setup.sh && \
+RUN . "/opt/ros/${ROS_DISTRO}/setup.sh" && \
     colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release
 
 ENV RMW_IMPLEMENTATION=rmw_fastrtps_cpp
@@ -41,7 +43,8 @@ ENV ROS_DOMAIN_ID=65
 RUN echo "source /home/ros/ws/erobs/install/setup.bash" >> /home/ros/.bashrc && \
     chown -R ros:ros /home/ros
 
-USER ros
+# Numeric uid/gid of the ros user (renamed from ubuntu above).
+USER 1000:1000
 
 # ros2 launch only handles SIGINT; podman's default SIGTERM is ignored by PID 1 and
 # every stop waits for the timeout and then SIGKILLs.
