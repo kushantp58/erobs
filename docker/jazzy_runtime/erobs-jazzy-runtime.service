@@ -21,7 +21,7 @@ Environment="BEAMBOT_BEAMLINE_CONFIG=/home/ros/ws/erobs/src/beambot/config/examp
 
 
 Environment="LAUNCH_ARGS=enable_vision:=false enable_pipettor:=false"
-# Non-default ROS domain; keep in sync with the Dockerfile.
+# Non-default ROS domain. This unit is the only place it is set; the image uses the ROS default (0).
 Environment="ROS_DOMAIN_ID=65"
 # Fast DDS discovery server. Once it is reachable from this host:
 #   1. Uncomment the line below.

@@ -17,8 +17,9 @@ Arguments after the image name are passed to `beambot_bringup.launch.py`.
 
 - The container runs as the non-root user `ros` (uid 1000). The workspace is at
   `/home/ros/ws/erobs`.
-- ROS runs on domain 65. This is set in the Dockerfile and in
-  `erobs-jazzy-runtime.service`; keep the two in sync.
+- The service runs ROS on domain 65, set in `erobs-jazzy-runtime.service`. The image
+  itself uses the ROS default (domain 0); pass `-e ROS_DOMAIN_ID=65` to match the
+  service when running it by hand.
 
 ## Rosbridge
 
