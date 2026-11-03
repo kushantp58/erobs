@@ -28,6 +28,7 @@ This pulls in:
 - `serial` - ROS2 serial communication
 - `robotiq_hande_driver` - Robotiq HandE gripper driver
 - `robotiq_hande_description` - Robotiq HandE URDF models
+- `ros2_epick_gripper` - ePick vacuum gripper driver and description
 - `pipettor` - Pipettor model, driver and action interface
 
 Imported directories are gitignored and versioned separately. Re-importing can
